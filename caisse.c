@@ -14,7 +14,7 @@ void vente_billets(int *mem, int semid, const char *titre_film) {
     if (*mem > 0) {
         int billets_achetes = nombre_aleatoire(1, 7); // Random number of tickets between 1 and 7
         if (billets_achetes <= *mem) {
-            attente_aleatoire(1, 3); // Random processing time between 1 and 3 seconds
+            attente_aleatoire(3); // Random processing time between 1 and 3 seconds
             *mem -= billets_achetes;
             printf("Caisse vend %d billets pour \"%s\".\n", billets_achetes, titre_film);
         } else {
