@@ -2,24 +2,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <time.h>
+#include "aleatoire.c"
 
-extern void attente_aleatoire();
 extern int *attacher_segment_memoire();
 extern int P();
 extern int V();
 
-int vente_billets(int *mem, int semid, const char *titre_film) {
-    bool billets_vendus = false;
-
+void vente_billets(int *mem, int semid, const char *titre_film) {
     P(semid);
 
     if (*mem > 0) {
-        int billets_achetes = rand() % 7 + 1;
+        int billets_achetes = nombre_aleatoire(1, 7); // Random number of tickets between 1 and 7
         if (billets_achetes <= *mem) {
+            attente_aleatoire(1, 3); // Random processing time between 1 and 3 seconds
             *mem -= billets_achetes;
             printf("Caisse vend %d billets pour \"%s\".\n", billets_achetes, titre_film);
-            billets_vendus = true;
         } else {
             printf("Caisse ne peut pas satisfaire la demande.\n");
         }
@@ -28,13 +25,9 @@ int vente_billets(int *mem, int semid, const char *titre_film) {
     }
 
     V(semid);
-
-    return billets_vendus;
 }
 
 int main(int argc, char *argv[]) {
-    unsigned int delais = 3;
-
     int shmid = atoi(argv[1]);
     int semid = atoi(argv[2]);
     const char *titre_film = argv[3];
@@ -42,11 +35,8 @@ int main(int argc, char *argv[]) {
     int *mem = attacher_segment_memoire(mem, &shmid);
 
     while (1) {
-        attente_aleatoire(delais);
-        printf("Caisse pour \"%s\": Un client se présente.\n", titre_film);
-        while (!vente_billets(mem, semid, titre_film)) {
-            sleep(1);
-        }
+        vente_billets(mem, semid, titre_film);
+        attente_aleatoire(1, 3); // Random interval between 1 and 3 seconds before the next client
     }
 
     return 0;
