@@ -1,11 +1,11 @@
-# Project: vente_place_cinema
+# Projet: cinema
 
-OBJ = sem_op.o shm_op.o aleatoire.o
-LINKOBJ = $(OBJ)
-BIN = vente_place_cinema entree sortie caisse afficheur
+OBJ  = sem_op.o shm_op.o aleatoire.o
+LINKOBJ  = $(OBJ)
+BIN  = vente_place_cinema entree sortie caisse
 CFLAGS = -g #-Wall
 
-all: vente_place_cinema entree sortie caisse afficheur
+all: $(BIN)
 
 vente_place_cinema: $(LINKOBJ) shm_const.h parking.c
 	$(CC) parking.c $(LINKOBJ) -o vente_place_cinema $(CFLAGS)
@@ -19,9 +19,6 @@ entree: $(LINKOBJ) shm_const.h entree.c
 caisse: $(LINKOBJ) shm_const.h caisse.c
 	$(CC) caisse.c $(LINKOBJ) -o caisse $(CFLAGS)
 
-afficheur: $(LINKOBJ) shm_const.h afficheur.c
-	$(CC) afficheur.c $(LINKOBJ) -o afficheur $(CFLAGS)
-
 shm_op.o: shm_op.c shm_const.h
 	$(CC) -c shm_op.c $(CFLAGS)
 
@@ -31,5 +28,5 @@ sem_op.o: sem_op.c shm_const.h
 aleatoire.o: aleatoire.c
 	$(CC) -c aleatoire.c $(CFLAGS)
 
-clean:
+clean: 
 	rm -f $(OBJ) $(BIN)
