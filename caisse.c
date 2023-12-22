@@ -9,6 +9,7 @@ void attente_aleatoire(unsigned int delais);
 extern int *attacher_segment_memoire();
 extern int P();
 extern int V();
+extern int nombre_aleatoire(int min, int max);
 
 void vente_billets(int *mem, int semid, const char *titre_film) {
     P(semid);
@@ -38,4 +39,10 @@ int main(int argc, char *argv[]) {
 
     while (*mem > 0) {
         vente_billets(mem, semid, titre_film);
-        attente_ale
+        attente_aleatoire(3); // Random interval between 1 and 3 seconds before the next client
+    }
+
+    printf("Toutes les places pour \"%s\" ont été vendues. Arrêt du programme.\n", titre_film);
+
+    return 0;
+}
