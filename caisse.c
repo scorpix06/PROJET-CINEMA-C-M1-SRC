@@ -34,10 +34,12 @@ int main(int argc, char *argv[]) {
 
     int *mem = attacher_segment_memoire(mem, &shmid);
 
-    while (1) {
+    while (*mem > 0) {
         vente_billets(mem, semid, titre_film);
         attente_aleatoire(1, 3); // Random interval between 1 and 3 seconds before the next client
     }
+
+    printf("Toutes les places pour \"%s\" ont été vendues. Arrêt du programme.\n", titre_film);
 
     return 0;
 }
